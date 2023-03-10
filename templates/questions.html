@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quiz Game</title>
+    <meta name="description" content="Quiz Game with Flask">
+  </head>
+  <body>
+    <h1>Digestive System Revision Questions</h1>
+    <h3>
+    <pre>What happens to that cheeseburger and fries (or, we hope, that whole wheat bread and green salad)</pre>
+    <pre>you had for lunch?</pre>
+    <pre>During the digestive process, food is converted into energy that's used by your body.</pre>
+    <pre>Take this quiz to see how much you know about how digestion works.</pre></h3>
+    
+    <form action ="/results" method ="post">
+      {% for question in display_questions %}
+        {{question.question}}
+        <ul>
+          {% for option in question.options %}
+            <li><input type = "radio" name ="{{question.question}}" value="{{option}}">{{ option}}</li>
+          {%endfor%}
+        </ul>
+      {% endfor %}
+      <input type= "submit" value = "Submit">
+
+
+  </body>
+</html>
