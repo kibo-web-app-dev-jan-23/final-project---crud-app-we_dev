@@ -38,37 +38,49 @@ with app.app_context():
     db.create_all()
 
 
+# Define route for the homepage
 @app.route("/")
 def index():
+    # If user is already logged in, redirect them to the questions page
     if 'logged_in' in session and session['logged_in']:
         return redirect(url_for('questions'))
+    # Otherwise, render the homepage template
     return render_template("home.html")
 
 
+# Define route for registering a new user
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    # If the form is submitted via POST
     if request.method == 'POST':
+        # Get the form data from the request
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
 
+        # Check if the passwords match
         if password != confirm_password:
             error = "Passwords do not match. Please try again."
             return render_template('register.html', error=error)
 
+        # Check if the username is already taken
         existing_user = Gamer.query.filter_by(username=username).first()
         if existing_user:
             error = "Username already exists. Please choose another one."
             return render_template('register.html', error=error)
 
+        # Create a new user object and add it to the database
         user = Gamer(username=username, email=email, password=password)
         db.session.add(user)
         db.session.commit()
         
+        # Redirect the user to the login page after registering
         return redirect(url_for('login'))
 
+    # If the form is not submitted via POST, render the registration page template
     return render_template('register.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
